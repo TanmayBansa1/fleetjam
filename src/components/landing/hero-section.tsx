@@ -1,11 +1,10 @@
-import React from 'react'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { HeroHeader } from './header'
 import { InfiniteSlider } from '@/components/ui/infinite-slider'
 import { ProgressiveBlur } from '@/components/ui/progressive-blur'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
+import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components'
 
 export default function HeroSection() {
     return (
@@ -29,10 +28,10 @@ export default function HeroSection() {
                       size="lg"
                       className="h-12 rounded-full pl-5 pr-3 text-base"
                     >
-                      <Link href="#link">
+                      <LoginLink postLoginRedirectURL='/dashboard'>
                         <span className="text-nowrap">Start Your Journey</span>
                         <ChevronRight className="ml-1" />
-                      </Link>
+                      </LoginLink>
                     </Button>
                   </div>
                 </div>
