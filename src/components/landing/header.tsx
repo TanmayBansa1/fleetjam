@@ -1,11 +1,14 @@
 'use client'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { ArrowRightIcon, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
 import { useScroll, motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import {RegisterLink, LoginLink} from "@kinde-oss/kinde-auth-nextjs/components";
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import { Skeleton } from '../ui/skeleton'
 
 const menuItems = [
     { name: 'Features', href: '#link' },
@@ -18,6 +21,7 @@ export const HeroHeader = () => {
     const [menuState, setMenuState] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const { scrollYProgress } = useScroll()
+    const {user, isLoading} = useKindeBrowserClient();
 
     useEffect(() => {
         const unsubscribe = scrollYProgress.on('change', (latest) => {
@@ -80,23 +84,31 @@ export const HeroHeader = () => {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+{!isLoading && !user && <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                                 <Button
                                     asChild
                                     variant="outline"
                                     size="sm">
-                                    <Link href="#">
-                                        <span>Login</span>
-                                    </Link>
+                                    <LoginLink postLoginRedirectURL='/dashboard'>Sign in</LoginLink>
                                 </Button>
                                 <Button
                                     asChild
                                     size="sm">
-                                    <Link href="#">
-                                        <span>Sign Up</span>
-                                    </Link>
+                                    <RegisterLink postLoginRedirectURL='/dashboard'>Sign up</RegisterLink>
                                 </Button>
+                            </div>}
+                            {isLoading && <div>
+                                <Skeleton className="w-20 h-10" />
                             </div>
+                            }
+                            {
+                                !isLoading && user && <div>
+                                    <Button variant={"outline"}>
+                                        <Link className='w-full h-full' href='/dashboard'>Dashboard</Link>
+                                        <ArrowRightIcon className='w-4 h-4' />
+                                    </Button>
+                                </div>
+                            }
                         </div>
                     </motion.div>
                 </div>
